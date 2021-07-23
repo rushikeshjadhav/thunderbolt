@@ -1,15 +1,17 @@
-# hello-world
+# Build your kernel driver
 
-## To build the driver yourself, go on your docker host and use follwing shell commands to build it.
+In order to build any driver yourself, go on your docker host and use follwing shell commands to build it:
 
-mkdir driver-hello-world
+```
+mkdir thunderbolt
 
-cd driver-hello-world
+cd thunderbolt
 
 git clone https://github.com/xcp-ng/xcp-ng-build-env
 
-git clone https://github.com/rushikeshjadhav/hello-world.git
+git clone https://github.com/xcp-ng-rpms/thunderbolt-module
 
-chown 1000 ./hello-world/ -R
+chown 1000 ./thunderbolt-module/ -R
 
-./xcp-ng-build-env/run.py -b 7.6 --build-local hello-world/ --rm
+./xcp-ng-build-env/run.py -b 8.2 --build-local thunderbolt-module/ --rm
+```

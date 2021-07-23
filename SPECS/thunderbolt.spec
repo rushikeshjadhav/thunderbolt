@@ -1,11 +1,12 @@
 %define uname  %{kernel_version}
 %define module_dir updates
 
-Summary: Driver for hello-world
-Name: hello-world
+Summary: Driver for thunderbolt-module
+Name: thunderbolt-module
 Version: 1.0
 Release: %{?release}%{!?release:1}
 License: GPL
+
 Source: %{name}-%{version}.tar.gz
 
 BuildRequires: kernel-devel
@@ -15,16 +16,16 @@ Requires(post): /usr/sbin/depmod
 Requires(postun): /usr/sbin/depmod
 
 %description
-hello-world Linux Device Driver source.
+thunderbolt-module Linux Device Driver source.
 
 %prep
 %setup -q -n %{name}-%{version}
 
 %build
-%{__make} -C /lib/modules/%{uname}/build M=$(pwd) modules
+%{?cov_wrap} %{make_build} -C /lib/modules/%{uname}/build M=$(pwd) modules
 
 %install
-%{__make} -C /lib/modules/%{uname}/build M=$(pwd) INSTALL_MOD_PATH=%{buildroot} INSTALL_MOD_DIR=%{module_dir} DEPMOD=/bin/true modules_install
+%{?cov_wrap} %{__make} %{?_smp_mflags} -C /lib/modules/%{uname}/build M=$(pwd) INSTALL_MOD_PATH=%{buildroot} INSTALL_MOD_DIR=%{module_dir} DEPMOD=/bin/true modules_install
 
 # remove extra files modules_install copies in
 rm -f %{buildroot}/lib/modules/%{uname}/modules.*
@@ -49,5 +50,5 @@ find %{buildroot}/lib/modules/%{uname} -name "*.ko" -type f | xargs chmod u+x
 %doc
 
 %changelog
-* Sat Jan 26 2019 Rushikesh Jadhav <rushikesh7@gmail.com> - 1.0
-- Added example driver hello-world-1.0
+* Sat Jul 24 2021 Rushikesh Jadhav <rushikesh7@gmail.com> - 1.0
+- Add driver for thunderbolt-module
